@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Heart, ShoppingBag } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { formatPrice, type Product } from '@/lib/catalog'
@@ -9,7 +10,7 @@ export function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isWishlisted } = useStore()
   const wished = isWishlisted(product.id)
   return <article className="catalog-product-card">
-    <div className="catalog-product-image"><img src={product.image} alt={product.name} /><button className="catalog-heart" aria-label={`${wished ? 'Remove' : 'Add'} ${product.name} ${wished ? 'from' : 'to'} wishlist`} onClick={() => toggleWishlist(product.id)}><Heart size={18} fill={wished ? 'currentColor' : 'none'} /></button>{product.badge && <span className="catalog-badge">{product.badge}</span>}</div>
+    <Link href={`/product/${product.id}`} aria-label={`View ${product.name}`}><div className="catalog-product-image"><img src={product.image} alt={product.name} /><button className="catalog-heart" aria-label={`${wished ? 'Remove' : 'Add'} ${product.name} ${wished ? 'from' : 'to'} wishlist`} onClick={() => toggleWishlist(product.id)}><Heart size={18} fill={wished ? 'currentColor' : 'none'} /></button>{product.badge && <span className="catalog-badge">{product.badge}</span>}</div></Link>
     <div className="catalog-product-info"><div><h3>{product.name}</h3><p>{formatPrice(product.price)}</p></div><button className="catalog-add" aria-label={`Add ${product.name} to bag`} onClick={() => addToCart(product)}><ShoppingBag size={16} /></button></div>
     <div className="catalog-swatches">{product.colors.map((color) => <i key={color} style={{ backgroundColor: color }} />)}</div>
   </article>

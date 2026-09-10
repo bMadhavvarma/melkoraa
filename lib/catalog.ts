@@ -10,6 +10,7 @@ export type Product = {
   badge?: string
   description: string
   colors: string[]
+  gallery?: string[]
 }
 
 export const assets = {
@@ -35,8 +36,8 @@ export const assets = {
 }
 
 export const products: Product[] = [
-  { id: 'signature-shirt', name: 'Signature Shirt', price: 2199, image: assets.shirt, category: 'men', type: 'shirts', badge: 'NEW', description: 'A relaxed everyday shirt with a considered silhouette.', colors: ['#1a1a18', '#d9d2c5'] },
-  { id: 'everyday-hoodie', name: 'Everyday Hoodie', price: 1999, image: assets.hoodie, category: 'hoodies', type: 'hoodies', badge: 'NEW', description: 'Soft structure and easy layers for everyday movement.', colors: ['#9aaebe', '#1a1a18'] },
+  { id: 'signature-shirt', name: 'Signature Shirt', price: 2199, image: assets.shirt, category: 'men', type: 'shirts', badge: 'NEW', description: 'A relaxed everyday shirt with a considered silhouette.', colors: ['#1a1a18', '#d9d2c5'], gallery: [assets.shirt, assets.overshirt, assets.pink] },
+  { id: 'everyday-hoodie', name: 'Everyday Hoodie', price: 1999, image: assets.hoodie, category: 'hoodies', type: 'hoodies', badge: 'NEW', description: 'Soft structure and easy layers for everyday movement.', colors: ['#9aaebe', '#1a1a18'], gallery: [assets.hoodie, assets.hero, assets.shirt] },
   { id: 'urban-cargo', name: 'Urban Cargo', price: 2499, image: assets.cargo, category: 'cargos', type: 'cargos', description: 'Built for more with a utilitarian, tapered fit.', colors: ['#222222', '#887b69'] },
   { id: 'the-finishing-cap', name: 'The Finishing Cap', price: 899, image: assets.cap, category: 'accessories', type: 'accessories', description: 'A graphic cotton cap that finishes the look.', colors: ['#141414', '#d8d3c7'] },
   { id: 'classic-bracelet', name: 'Classic Loop Bracelet', price: 1299, image: assets.bracelet, category: 'accessories', type: 'accessories', description: 'A tactile leather accessory with a signature clasp.', colors: ['#151515'] },

@@ -3,12 +3,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import type { Product } from './catalog'
 
-type CartLine = Product & { quantity: number }
+type CartLine = Product & { quantity: number; size?: string; color?: string }
 type StoreContextValue = {
   cart: CartLine[]
   wishlist: string[]
   cartCount: number
-  addToCart: (product: Product) => void
+  addToCart: (product: Product, variant?: { size?: string; color?: string }) => void
   toggleWishlist: (productId: string) => void
   isWishlisted: (productId: string) => boolean
   cartOpen: boolean
@@ -33,7 +33,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<StoreContextValue>(() => ({
     cart, wishlist, cartCount: cart.reduce((total, item) => total + item.quantity, 0),
-    addToCart: (product) => { setCart((current) => { const found = current.find((item) => item.id === product.id); return found ? current.map((item) => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item) : [...current, { ...product, quantity: 1 }] }); setCartOpen(true) },
+    addToCart: (product, variant) => { setCart((current) => { const found = current.find((item) => item.id === product.id && item.size === variant?.size && item.color === variant?.color); return found ? current.map((item) => item.id === found.id && item.size === found.size && item.color === found.color ? { ...item, quantity: item.quantity + 1 } : item) : [...current, { ...product, ...variant, quantity: 1 }] }); setCartOpen(true) },
     toggleWishlist: (productId) => setWishlist((current) => current.includes(productId) ? current.filter((id) => id !== productId) : [...current, productId]),
     isWishlisted: (productId) => wishlist.includes(productId), cartOpen, setCartOpen,
   }), [cart, wishlist, cartOpen])
