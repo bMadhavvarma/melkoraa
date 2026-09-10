@@ -1,33 +1,29 @@
 'use client'
 
-import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { getSizeGuideKey, sizeGuides } from '@/lib/size-guides'
+import { Mail, MessageCircle, Ruler, X } from 'lucide-react'
+import { getSizeGuideKey, sizeGuides, type SizeGuide } from '@/lib/size-guides'
 import type { Product } from '@/lib/catalog'
+
+const categoryTabs = [['tshirts', 'T-SHIRTS'], ['hoodies', 'HOODIES'], ['shirts', 'SHIRTS'], ['cargos', 'CARGOS'], ['sweatshirts', 'SWEATSHIRTS']] as const
 
 export function SizeGuideModal({ product, isOpen, onClose }: { product: Product; isOpen: boolean; onClose: () => void }) {
   const dialogRef = useRef<HTMLDivElement>(null)
-  const [tab, setTab] = useState<'measure' | 'chart'>('measure')
-  const key = getSizeGuideKey(product)
-  const guide = key ? sizeGuides[key] : null
+  const [activeTab, setActiveTab] = useState<'measure' | 'chart'>('measure')
+  const productKey = getSizeGuideKey(product)
+  const [activeKey, setActiveKey] = useState(productKey)
+  const guide = activeKey ? sizeGuides[activeKey] : null
 
-  useEffect(() => {
-    if (!isOpen) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    dialogRef.current?.focus()
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKeyDown)
-    return () => { document.body.style.overflow = previous; document.removeEventListener('keydown', onKeyDown) }
-  }, [isOpen, onClose])
-
-  useEffect(() => { if (!isOpen) setTab('measure') }, [isOpen])
+  useEffect(() => { if (isOpen) { dialogRef.current?.focus(); document.body.style.overflow = 'hidden' } else document.body.style.overflow = '' ; return () => { document.body.style.overflow = '' } }, [isOpen])
+  useEffect(() => { const onKeyDown = (event: KeyboardEvent) => event.key === 'Escape' && onClose(); document.addEventListener('keydown', onKeyDown); return () => document.removeEventListener('keydown', onKeyDown) }, [onClose])
+  useEffect(() => { setActiveKey(productKey); setActiveTab('measure') }, [productKey])
   if (!isOpen || !guide) return null
 
-  return <div className="size-guide-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}><div className="size-guide-modal" role="dialog" aria-modal="true" aria-labelledby="size-guide-title" tabIndex={-1} ref={dialogRef}>
-    <button className="size-guide-close" onClick={onClose} aria-label="Close size guide"><X size={21} /></button>
-    <header className="size-guide-header"><div><p className="eyebrow">MELKORAA / FIT NOTES</p><h2 id="size-guide-title">{guide.title}</h2><p className="size-guide-label">SIZE CHART</p></div><p>All measurements are in centimeters (cm).</p></header>
-    <div className="size-guide-tabs"><button className={tab === 'measure' ? 'active' : ''} onClick={() => setTab('measure')}>HOW TO MEASURE</button><button className={tab === 'chart' ? 'active' : ''} onClick={() => setTab('chart')}>MEASUREMENT GUIDE</button></div>
-    <div className="size-guide-content"><section className="size-guide-measure">{tab === 'measure' ? <><div className="garment-diagram" aria-label="Measurement diagram"><span className="garment-line shoulder">SHOULDER</span><span className="garment-line chest">CHEST</span><span className="garment-line length">LENGTH</span><span className="garment-line sleeve">SLEEVE</span><div className="garment-shape" /></div><div className="measurement-list">{guide.measurementCopy.map((item, index) => <div key={item.label}><b>{index + 1}</b><span><strong>{item.label}</strong>{item.copy}</span></div>)}</div></> : <div className="measurement-explanation"><p className="eyebrow">MEASUREMENT GUIDE</p><h3>Find your best fit.</h3><p>Lay your favorite piece flat and compare each measurement to the chart. Measure without stretching the fabric.</p>{guide.measurementCopy.map((item) => <p key={item.label}><strong>{item.label}</strong> — {item.copy}</p>)}</div>}</section><section className="size-guide-chart"><p className="eyebrow">{guide.title}</p><h3>SIZE CHART</h3><div className="size-table-wrap"><table><thead><tr>{guide.columns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{guide.rows.map((row) => <tr key={row[0]}>{row.map((value) => <td key={value}>{value}</td>)}</tr>)}</tbody></table></div><div className="fit-guide"><p className="eyebrow">FIT GUIDE</p><div>{Object.entries(guide.fit).map(([name, copy]) => <span className={product.id.includes('hoodie') && name === 'Oversized' ? 'active' : ''} key={name}><strong>{name.toUpperCase()}</strong>{copy}</span>)}</div></div><p className="size-guide-note">{guide.note}</p><div className="size-guide-support"><p className="eyebrow">STILL UNSURE?</p><a href="https://wa.me/919999999999" target="_blank" rel="noreferrer">Chat with us on WhatsApp</a><a href="mailto:support@melkorraa.com">support@melkorraa.com</a><small>Need more help? Our team can recommend your best size.</small></div></section></div>
+  return <div className="size-guide-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><div className="size-guide-modal reference-size-modal" role="dialog" aria-modal="true" aria-labelledby="size-guide-title" tabIndex={-1} ref={dialogRef}>
+    <button className="size-guide-close" onClick={onClose} aria-label="Close size guide"><X size={18} /></button>
+    <nav className="size-guide-category-tabs" aria-label="Size guide categories">{categoryTabs.map(([key, label]) => <button key={key} className={activeKey === key ? 'active' : ''} onClick={() => { if (sizeGuides[key as keyof typeof sizeGuides]) setActiveKey(key as keyof typeof sizeGuides) }}>{label}</button>)}</nav>
+    <div className="reference-size-layout"><section className="reference-measure-panel"><div className="reference-guide-tabs"><button className={activeTab === 'measure' ? 'active' : ''} onClick={() => setActiveTab('measure')}>HOW TO MEASURE</button><button className={activeTab === 'chart' ? 'active' : ''} onClick={() => setActiveTab('chart')}>MEASUREMENT GUIDE</button></div>{activeTab === 'measure' ? <><div className="reference-artwork">{activeKey === 'hoodies' ? <img src="/images/hoodie-size-guide.png" alt="Hoodie measurement diagram" /> : <GarmentDiagram guide={guide} />}</div><div className="reference-measure-notes">{guide.measurementCopy.slice(0, 4).map((item, index) => <div key={item.label}><b>{index + 1}</b><span><strong>{item.label}</strong>{item.copy}</span></div>)}</div></> : <div className="reference-measure-copy"><p className="eyebrow">MEASUREMENT GUIDE</p><h3>Find your best fit.</h3><p>Lay your favorite piece flat and compare each measurement to the chart. Measure without stretching the fabric.</p>{guide.measurementCopy.map((item) => <p key={item.label}><strong>{item.label}</strong> — {item.copy}</p>)}</div>}</section><section className="reference-chart-panel"><header className="reference-chart-heading"><div><p className="size-guide-label">{guide.title}</p><h2 id="size-guide-title">SIZE CHART</h2><i /></div><small>All measurements are in centimeters (cm).</small></header><div className="size-table-wrap"><table><thead><tr>{guide.columns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{guide.rows.map((row, index) => <tr key={`${row[0]}-${index}`}>{row.map((value, cellIndex) => <td key={`${value}-${cellIndex}`}>{value}</td>)}</tr>)}</tbody></table></div><div className="reference-bottom-grid"><div className="reference-fit-box"><p className="size-guide-label">FIT GUIDE</p><div>{Object.entries(guide.fit).map(([name, copy]) => <span className={name === 'Relaxed' ? 'active' : ''} key={name}><strong>{name.toUpperCase()}</strong>{copy}</span>)}</div><p className="reference-footnote">{guide.note}</p></div><div className="reference-support-box"><p className="size-guide-label">STILL UNSURE?</p><a href="https://wa.me/919999999999" target="_blank" rel="noreferrer"><MessageCircle size={15} /><span><strong>Chat with us on WhatsApp</strong><small>Get size recommendations</small></span></a><a href="mailto:support@melkoraa.com"><Mail size={15} /><span><strong>Email our support team</strong><small>support@melkoraa.com</small></span></a><a href="#measurement"><Ruler size={15} /><span><strong>Check product measurements</strong><small>Available on each product page</small></span></a></div></div></section></div>
   </div></div>
 }
+
+function GarmentDiagram({ guide }: { guide: SizeGuide }) { return <div className="generic-garment-diagram"><div className="generic-garment-shape" /><span className="generic-line generic-shoulder">SHOULDER</span><span className="generic-line generic-chest">CHEST</span><span className="generic-line generic-length">LENGTH</span><span className="generic-line generic-sleeve">SLEEVE</span><small>{guide.title}</small></div> }
