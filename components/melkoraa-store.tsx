@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import {
   ArrowDown,
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react'
 
 const image = {
-  hero: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/home%20page%20background-EjOltxJLMUM9Mm1CnHNN2rzAv72Jkp.png',
+  hero: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/home%20page%20background-qhOLBViOo7lwbeiZ3BhsHj2K0vx5Mf.png',
   men: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/men%20wear%20image-ZE4azsdZieuW8sy82MmrLn2jOuz4bZ.png',
   women: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/men%20image%202-KAYkegWkvf0okglUvye9Dw4gi3an5E.png',
   kids: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kids%20image-dYjxCIMxILWzfmWOIo2yO16FZ36ge1.png',
@@ -64,7 +65,7 @@ export default function MelkoraaStore() {
         <a href="#top" aria-label="MELKORAA home"><Logo /></a>
         <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`}>
           <button className="mobile-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><X size={22} /></button>
-          {['Men', 'Women', 'Kids', 'Collections', 'Offers', 'About', 'Journal'].map((item) => <a key={item} href={item === 'Collections' ? '#collections' : item === 'Journal' ? '#journal' : '#new-arrivals'} onClick={() => setMenuOpen(false)}>{item}</a>)}
+          {['Men', 'Women', 'Kids', 'Collections', 'Offers', 'About', 'Journal'].map((item) => item === 'Collections' ? <Link key={item} href="/collections" onClick={() => setMenuOpen(false)}>{item}</Link> : <a key={item} href={item === 'Journal' ? '#journal' : '#new-arrivals'} onClick={() => setMenuOpen(false)}>{item}</a>)}
         </nav>
         <div className="header-actions">
           <button className="search-pill" onClick={() => setSearchOpen(!searchOpen)}><Search size={16} /><span>Search for products, collections...</span></button>
@@ -77,14 +78,14 @@ export default function MelkoraaStore() {
 
       <section id="top" className="hero-section">
         <img src={image.hero} alt="MELKORAA model wearing black essentials beside a mountain wall" />
-        <div className="hero-copy"><p className="eyebrow">WEAR A HIGHER YOU</p><span className="small-rule" /><h1>INDIVIDUALITY<br />IN EVERY THREAD</h1><p className="hero-text">Premium essentials for those who choose<br className="desktop-only" /> progress over ordinary.</p><div className="hero-buttons"><a className="button dark-button" href="#collections">SHOP COLLECTIONS <ArrowRight size={15} /></a><button className="button light-button" onClick={() => setVideoOpen(true)}>WATCH OUR STORY <Play size={13} fill="currentColor" /></button></div><div className="metrics"><div><strong>50K+</strong><span>HAPPY CUSTOMERS</span></div><div><strong>4.8<span className="star">★</span></strong><span>AVERAGE RATING</span></div><div><strong>PAN INDIA</strong><span>SHIPPING</span></div></div></div><div className="hero-scroll"><span>01</span><i /><span>02</span><i /><span>03</span><small>SCROLL<br />TO EXPLORE <ArrowDown size={14} /></small></div>
+        <div className="hero-copy"><p className="eyebrow">WEAR A HIGHER YOU</p><span className="small-rule" /><h1>INDIVIDUALITY<br />IN EVERY THREAD</h1><p className="hero-text">Premium essentials for those who choose<br className="desktop-only" /> progress over ordinary.</p><div className="hero-buttons"><Link className="button dark-button" href="/collections">SHOP COLLECTIONS <ArrowRight size={15} /></Link><button className="button light-button" onClick={() => setVideoOpen(true)}>WATCH OUR STORY <Play size={13} fill="currentColor" /></button></div><div className="metrics"><div><strong>50K+</strong><span>HAPPY CUSTOMERS</span></div><div><strong>4.8<span className="star">★</span></strong><span>AVERAGE RATING</span></div><div><strong>PAN INDIA</strong><span>SHIPPING</span></div></div></div><div className="hero-scroll"><span>01</span><i /><span>02</span><i /><span>03</span><small>SCROLL<br />TO EXPLORE <ArrowDown size={14} /></small></div>
       </section>
 
       <section id="collections" className="category-grid">
         {[['MEN', 'STRENGTH\nIN SIMPLICITY', image.men], ['WOMEN', 'GRACE\nIN MOTION', image.women], ['KIDS', 'BIGGER\nTOMORROWS', image.kids]].map(([title, subtitle, src]) => <a className="category-card" href="#new-arrivals" key={title} style={{ backgroundImage: `linear-gradient(90deg, rgba(0,0,0,.74), rgba(0,0,0,.02)), url("${src}")` }}><div><h2>{title}</h2><p>{subtitle.split('\n').map((line) => <span key={line}>{line}<br /></span>)}</p><span className="text-link">EXPLORE <ArrowRight size={14} /></span></div></a>)}
       </section>
 
-      <section id="new-arrivals" className="products-section"><div className="section-heading"><div><p className="eyebrow">NEW ARRIVALS</p><p>Everyday essentials. Elevated.</p></div><a href="#new-arrivals">VIEW ALL <ArrowRight size={15} /></a></div><div className="product-grid">{visibleProducts.map((product, index) => <article className="product-card" key={product.name}><div className="product-image"><img src={product.image} alt={product.name} /><button className="heart-button" aria-label={`Add ${product.name} to wishlist`} onClick={() => toggleLike(index)}><Heart size={18} fill={liked.includes(index) ? 'currentColor' : 'none'} /></button></div>{product.tag && <span className="product-tag">{product.tag}</span>}<h3>{product.name}</h3><p>{product.price}</p><div className="product-meta"><span className="swatches"><i /><i /><i /></span><button aria-label={`Like ${product.name}`} onClick={() => toggleLike(index)}><Heart size={16} fill={liked.includes(index) ? 'currentColor' : 'none'} /></button></div></article>)}</div></section>
+      <section id="new-arrivals" className="products-section"><div className="section-heading"><div><p className="eyebrow">NEW ARRIVALS</p><p>Everyday essentials. Elevated.</p></div><Link href="/collections">VIEW ALL <ArrowRight size={15} /></Link></div><div className="product-grid">{visibleProducts.map((product, index) => <article className="product-card" key={product.name}><div className="product-image"><img src={product.image} alt={product.name} /><button className="heart-button" aria-label={`Add ${product.name} to wishlist`} onClick={() => toggleLike(index)}><Heart size={18} fill={liked.includes(index) ? 'currentColor' : 'none'} /></button></div>{product.tag && <span className="product-tag">{product.tag}</span>}<h3>{product.name}</h3><p>{product.price}</p><div className="product-meta"><span className="swatches"><i /><i /><i /></span><button aria-label={`Like ${product.name}`} onClick={() => toggleLike(index)}><Heart size={16} fill={liked.includes(index) ? 'currentColor' : 'none'} /></button></div></article>)}</div></section>
 
       <section className="editorial-split"><a className="editorial-card fabric-card" href="#story"><div><h2>DETAILS<br />DEFINE<br />DISTINCTION</h2><p>Premium materials.<br />Thoughtful craftsmanship.<br />Made to last.</p><span className="text-link">LEARN MORE <ArrowRight size={14} /></span></div></a><a className="editorial-card mountain-card" href="#story" style={{ backgroundImage: `linear-gradient(90deg, rgba(0,0,0,.54), rgba(0,0,0,.05)), url("${image.footer}")` }}><div><h2>A LARGER<br />TOMORROW</h2><p>Sustainable choices.<br />Stronger communities.<br />A brighter tomorrow.</p><span className="text-link">OUR IMPACT <ArrowRight size={14} /></span></div></a></section>
 
