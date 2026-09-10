@@ -94,7 +94,7 @@ h1, h2, h3, p { margin-top: 0; }
 .secondary-collections .collection-card { min-height: 196px; padding: 28px 38px; }
 .secondary-collections .collection-card h2 { font-size: 18px; }
 .collections-editorial { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #f7f5f0; }
-.fabric-editorial, .mountain-editorial { min-height: 285px; padding: 48px 6%; background-size: cover; background-position: center; color: white; }
+.fabric-editorial, .mountain-editorial { min-height: 285px; padding: 48px 6%; background-size: cover; background-position: center; color: white; }.fabric-editorial { background: linear-gradient(110deg, #101010, #2a2a29); }
 .fabric-editorial h2, .mountain-editorial h2 { font-size: 28px; line-height: 1.02; }
 .fabric-editorial p { font-size: 11px; line-height: 1.6; letter-spacing: .11em; }
 .mountain-editorial { display: flex; justify-content: space-between; color: #111; }

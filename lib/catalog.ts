@@ -30,6 +30,8 @@ export const assets = {
   overshirt: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kqzKqRn60pCaxQ0oVhhuT0NLBB7kg7.png',
   pink: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CzaCjmazBqOX3J6Yi9y7cZTk580x0X.png',
   cap: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-77l87O3tm3A9NzZbaHXgk8Rs01UuNa.png',
+  graphicTee: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NCAcKq9mqnLtuqslLmcaubTTSF8NOD.png',
+  pinkTee: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CzaCjmazBqOX3J6Yi9y7cZTk580x0X.png',
 }
 
 export const products: Product[] = [
@@ -44,7 +46,9 @@ export const products: Product[] = [
   { id: 'garden-set', name: 'Garden Play Set', price: 1799, image: assets.girl, category: 'kids', type: 'shirts', description: 'A joyful printed set made for bigger tomorrows.', colors: ['#18765f'] },
   { id: 'better-days-set', name: 'Better Days Set', price: 1499, image: assets.stripedBoy, category: 'kids', type: 'shirts', description: 'Colorful comfort for every small adventure.', colors: ['#d9bf9f', '#6f8f72'] },
   { id: 'clean-overshirt', name: 'Clean Overshirt', price: 2299, image: assets.overshirt, category: 'men', type: 'shirts', description: 'A crisp overshirt with effortless warm-weather ease.', colors: ['#f5f5f2'] },
-  { id: 'core-tee', name: 'Core Tee', price: 1299, image: assets.shirt, category: 'tshirts', type: 'tshirts', description: 'The everyday tee, refined through fit and fabric.', colors: ['#1a1a18', '#dedbd4', '#85827d'] },
+  { id: 'core-tee', name: 'Core Tee', price: 1299, image: assets.graphicTee, category: 'tshirts', type: 'tshirts', description: 'The everyday tee, refined through fit and fabric.', colors: ['#1a1a18', '#dedbd4', '#85827d'] },
+  { id: 'resort-graphic-tee', name: 'Resort Graphic Tee', price: 1699, image: assets.graphicTee, category: 'tshirts', type: 'tshirts', badge: 'NEW', description: 'A statement short-sleeve shirt with a bold signature print.', colors: ['#d3a93e', '#151515'] },
+  { id: 'pink-everyday-tee', name: 'Everyday Stripe Tee', price: 1399, image: assets.pinkTee, category: 'tshirts', type: 'tshirts', description: 'A soft striped layer for easy everyday styling.', colors: ['#e7b6c7', '#f2eee7'] },
   { id: 'contrast-hoodie', name: 'Contrast Hoodie', price: 2099, image: assets.hoodie, category: 'tshirts', type: 'hoodies', description: 'A short-sleeve hoodie layer with graphic contrast.', colors: ['#8ba9bb', '#f5f5f0'] },
 ]
 
