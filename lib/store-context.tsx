@@ -9,6 +9,8 @@ type StoreContextValue = {
   wishlist: string[]
   cartCount: number
   addToCart: (product: Product, variant?: { size?: string; color?: string }) => void
+  updateCartQuantity: (productId: string, variant: { size?: string; color?: string } | undefined, amount: number) => void
+  removeFromCart: (productId: string, variant?: { size?: string; color?: string }) => void
   toggleWishlist: (productId: string) => void
   isWishlisted: (productId: string) => boolean
   cartOpen: boolean
@@ -33,7 +35,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<StoreContextValue>(() => ({
     cart, wishlist, cartCount: cart.reduce((total, item) => total + item.quantity, 0),
-    addToCart: (product, variant) => { setCart((current) => { const found = current.find((item) => item.id === product.id && item.size === variant?.size && item.color === variant?.color); return found ? current.map((item) => item.id === found.id && item.size === found.size && item.color === found.color ? { ...item, quantity: item.quantity + 1 } : item) : [...current, { ...product, ...variant, quantity: 1 }] }); setCartOpen(true) },
+    addToCart: (product, variant) => { setCart((current) => { const found = current.find((item) => item.id === product.id && item.size === variant?.size && item.color === variant?.color); return found ? current.map((item) => item.id === found.id && item.size === found.size && item.color === found.color ? { ...item, quantity: item.quantity + 1 } : item) : [...current, { ...product, ...variant, quantity: 1 }] }) },
+    updateCartQuantity: (productId, variant, amount) => setCart((current) => current.map((item) => item.id === productId && item.size === variant?.size && item.color === variant?.color ? { ...item, quantity: item.quantity + amount } : item).filter((item) => item.quantity > 0)),
+    removeFromCart: (productId, variant) => setCart((current) => current.filter((item) => !(item.id === productId && item.size === variant?.size && item.color === variant?.color))),
     toggleWishlist: (productId) => setWishlist((current) => current.includes(productId) ? current.filter((id) => id !== productId) : [...current, productId]),
     isWishlisted: (productId) => wishlist.includes(productId), cartOpen, setCartOpen,
   }), [cart, wishlist, cartOpen])

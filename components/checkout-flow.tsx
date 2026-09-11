@@ -18,14 +18,14 @@ function Progress({ step }: { step: CheckoutStep }) {
   return <div className="checkout-progress">{steps.map((item, index) => <div className={item === step ? 'active' : steps.indexOf(step as (typeof steps)[number]) > index ? 'done' : ''} key={item}><span>{steps.indexOf(step as (typeof steps)[number]) > index ? <Check size={12} /> : index + 1}</span><b>{item}</b></div>)}</div>
 }
 
-function OrderSummary({ shipping, cart, subtotal, discount, updateQuantity }: { shipping: ShippingMethod; cart: ReturnType<typeof useStore>['cart']; subtotal: number; discount: number; updateQuantity: (id: string, amount: number) => void }) {
+function OrderSummary({ shipping, cart, subtotal, discount, updateQuantity }: { shipping: ShippingMethod; cart: ReturnType<typeof useStore>['cart']; subtotal: number; discount: number; updateQuantity: (id: string, amount: number, item: ReturnType<typeof useStore>['cart'][number]) => void }) {
   const shippingCost = shipping === 'express' ? 1200 : subtotal >= 7500 ? 0 : 650
   const total = subtotal + shippingCost - discount
-  return <aside className="checkout-summary"><p className="eyebrow">ORDER SUMMARY</p><div className="checkout-items">{cart.map((item) => <div className="checkout-item" key={`${item.id}-${item.size}-${item.color}`}><img src={item.image} alt="" /><div><h3>{item.name}</h3><p>{item.size ? `Size ${item.size} · ` : ''}{item.quantity} × {formatPrice(item.price)}</p><div className="checkout-quantity"><button type="button" aria-label={`Decrease ${item.name}`} onClick={() => updateQuantity(item.id, -1)}><Minus size={12} /></button><span>{item.quantity}</span><button type="button" aria-label={`Increase ${item.name}`} onClick={() => updateQuantity(item.id, 1)}><Plus size={12} /></button></div></div></div>)}</div><div className="checkout-lines"><div><span>Subtotal</span><b>{formatPrice(subtotal)}</b></div><div><span>Shipping</span><b>{shippingCost ? formatPrice(shippingCost) : 'FREE'}</b></div>{discount > 0 && <div><span>Promo discount</span><b>−{formatPrice(discount)}</b></div>}<div className="checkout-total"><span>Total</span><b>{formatPrice(total)}</b></div></div><p className="checkout-secure"><LockKeyhole size={13} /> Secure checkout · Taxes calculated at checkout</p></aside>
+  return <aside className="checkout-summary"><p className="eyebrow">ORDER SUMMARY</p><div className="checkout-items">{cart.map((item) => <div className="checkout-item" key={`${item.id}-${item.size}-${item.color}`}><img src={item.image} alt="" /><div><h3>{item.name}</h3><p>{item.size ? `Size ${item.size} · ` : ''}{item.quantity} × {formatPrice(item.price)}</p><div className="checkout-quantity"><button type="button" aria-label={`Decrease ${item.name}`} onClick={() => updateQuantity(item.id, -1, item)}><Minus size={12} /></button><span>{item.quantity}</span><button type="button" aria-label={`Increase ${item.name}`} onClick={() => updateQuantity(item.id, 1, item)}><Plus size={12} /></button></div></div></div>)}</div><div className="checkout-lines"><div><span>Subtotal</span><b>{formatPrice(subtotal)}</b></div><div><span>Shipping</span><b>{shippingCost ? formatPrice(shippingCost) : 'FREE'}</b></div>{discount > 0 && <div><span>Promo discount</span><b>−{formatPrice(discount)}</b></div>}<div className="checkout-total"><span>Total</span><b>{formatPrice(total)}</b></div></div><p className="checkout-secure"><LockKeyhole size={13} /> Secure checkout · Taxes calculated at checkout</p></aside>
 }
 
 export function CheckoutFlow() {
-  const { cart, setCartOpen } = useStore()
+  const { cart, updateCartQuantity } = useStore()
   const [step, setStep] = useState<CheckoutStep>('shipping')
   const [form, setForm] = useState<FormState>(initialForm)
   const [shipping, setShipping] = useState<ShippingMethod>('standard')
@@ -36,7 +36,7 @@ export function CheckoutFlow() {
   const [orderDate, setOrderDate] = useState('')
   const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0), [cart])
   const discount = promoApplied ? Math.round(subtotal * .1) : 0
-  const updateQuantity = (id: string, amount: number) => { const next = cart.map((item) => item.id === id ? { ...item, quantity: item.quantity + amount } : item).filter((item) => item.quantity > 0); window.localStorage.setItem('melkoraa-cart', JSON.stringify(next)); window.location.reload() }
+  const updateQuantity = (id: string, amount: number, item: (typeof cart)[number]) => updateCartQuantity(id, item, amount)
   const update = (key: keyof FormState, value: string | boolean) => setForm((current) => ({ ...current, [key]: value }))
   const validateShipping = () => { const required: (keyof FormState)[] = ['email', 'firstName', 'lastName', 'address', 'city', 'state', 'zip']; if (required.some((key) => !String(form[key]).trim())) return 'Complete all required shipping fields to continue.'; if (!/^\S+@\S+\.\S+$/.test(form.email)) return 'Enter a valid email address.'; return '' }
   const validatePayment = () => { const required: (keyof FormState)[] = ['cardName', 'cardNumber', 'expiry', 'cvc']; if (required.some((key) => !String(form[key]).trim())) return 'Complete all payment fields to continue.'; if (form.cardNumber.replace(/\s/g, '').length < 12) return 'Enter a valid card number.'; return '' }
