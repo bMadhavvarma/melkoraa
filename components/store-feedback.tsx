@@ -6,9 +6,9 @@ import { useStore } from '@/lib/store-context'
 import { formatPrice, products } from '@/lib/catalog'
 
 export function CartToast() {
-  const { toast, dismissToast } = useStore()
+  const { toast, dismissToast, setCartOpen } = useStore()
   if (!toast) return null
-  return <div className="cart-toast" role="status"><div className="cart-toast-icon"><Check size={15} /></div><div className="cart-toast-copy"><b>ADDED TO BAG</b><span>{toast.product.name}</span><small>{toast.variant?.size ? `Size ${toast.variant.size} · ` : ''}{formatPrice(toast.product.price)}</small></div><button className="cart-toast-close" onClick={dismissToast} aria-label="Dismiss notification"><X size={16} /></button><Link href="/checkout" className="cart-toast-action" onClick={dismissToast}>VIEW CART</Link></div>
+  return <div className="cart-toast" role="status"><div className="cart-toast-icon"><Check size={15} /></div><div className="cart-toast-copy"><b>ADDED TO BAG</b><span>{toast.product.name}</span><small>{toast.variant?.size ? `Size ${toast.variant.size} · ` : ''}{formatPrice(toast.product.price)}</small></div><button className="cart-toast-close" onClick={dismissToast} aria-label="Dismiss notification"><X size={16} /></button><button className="cart-toast-action" onClick={() => { dismissToast(); setCartOpen(true) }}>VIEW CART</button></div>
 }
 
 export function GlobalSearch({ onClose }: { onClose: () => void }) {
