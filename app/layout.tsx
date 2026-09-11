@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { StoreProvider } from '@/lib/store-context'
+import { CartToast } from '@/components/store-feedback'
 
 export const metadata: Metadata = {
   title: 'MELKORAA — Individuality in Every Thread',
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { colorScheme: 'light', themeColor: '#f7f5f0', width: 'device-width', initialScale: 1 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className="bg-background"><body><StoreProvider>{children}</StoreProvider>{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
+  return <html lang="en" className="bg-background"><body><StoreProvider>{children}<CartToast /></StoreProvider>{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
 }

@@ -11,7 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
   const wished = isWishlisted(product.id)
   return <article className="catalog-product-card">
     <Link href={`/product/${product.id}`} aria-label={`View ${product.name}`}><div className="catalog-product-image"><img src={product.image} alt={product.name} /><button className="catalog-heart" aria-label={`${wished ? 'Remove' : 'Add'} ${product.name} ${wished ? 'from' : 'to'} wishlist`} onClick={(event) => { event.preventDefault(); event.stopPropagation(); toggleWishlist(product.id) }}><Heart size={18} fill={wished ? 'currentColor' : 'none'} /></button>{product.badge && <span className="catalog-badge">{product.badge}</span>}</div></Link>
-    <div className="catalog-product-info"><div><h3>{product.name}</h3><p>{formatPrice(product.price)}</p></div><button className="catalog-add" aria-label={`Add ${product.name} to bag`} onClick={() => addToCart(product)}><ShoppingBag size={16} /></button></div>
+    <div className="catalog-product-info"><div><h3>{product.name}</h3><p>{formatPrice(product.price)}</p></div>{product.type === 'accessories' ? <button className="catalog-add" aria-label={`Add ${product.name} to bag`} onClick={() => addToCart(product, { color: product.colors[0], size: 'ONE SIZE' })}><ShoppingBag size={16} /></button> : <Link className="catalog-add" href={`/product/${product.id}`} aria-label={`Choose options for ${product.name}`}><ShoppingBag size={16} /></Link>}</div>
     <div className="catalog-swatches">{product.colors.map((color) => <i key={color} style={{ backgroundColor: color }} />)}</div>
   </article>
 }
