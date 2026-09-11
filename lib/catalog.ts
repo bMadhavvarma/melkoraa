@@ -14,7 +14,7 @@ export type Product = {
 }
 
 export const assets = {
-  hero: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/footer-7iLskGitKhlupqEGXjuNIi9Air4Gba.png',
+  hero: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/home%20page%20background-XaeYSkL4W83ZDFT3VW9U9ra3ujCRtL.png',
   men: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/men%20wear%20image-ZE4azsdZieuW8sy82MmrLn2jOuz4bZ.png',
   women: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/men%20image%202-KAYkegWkvf0okglUvye9Dw4gi3an5E.png',
   kids: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kids%20image-dYjxCIMxILWzfmWOIo2yO16FZ36ge1.png',
