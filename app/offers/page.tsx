@@ -1,0 +1,2 @@
+import Link from 'next/link'
+export default function OffersPage() { return <main className="content-page simple-page"><p className="eyebrow">MELKORAA OFFERS</p><h1>More considered.<br />A little easier.</h1><p>Enjoy free shipping on orders above ₹1999. Sign up for early access to new edits and private offers.</p><Link href="/collections" className="button dark-button">SHOP THE EDIT <span>→</span></Link></main> }

@@ -1,0 +1,2 @@
+import Link from 'next/link'
+export default function AccountPage() { return <main className="content-page simple-page"><p className="eyebrow">YOUR MELKORAA</p><h1>Keep your<br />everyday close.</h1><p>Account features are coming soon. For now, keep your order number handy to follow delivery updates.</p><Link href="/track-order" className="button dark-button">TRACK AN ORDER <span>→</span></Link></main> }

@@ -1,0 +1,3 @@
+'use client'
+import { useEffect, useState } from 'react'
+export default function TrackOrderPage() { const [order, setOrder] = useState<{ number: string; date: string } | null>(null); useEffect(() => { try { setOrder(JSON.parse(localStorage.getItem('melkoraa-last-order') || 'null')) } catch {} }, []); return <main className="content-page simple-page"><p className="eyebrow">ORDER CARE</p><h1>Track your<br />order.</h1>{order ? <div className="order-status"><p className="eyebrow">LOCAL DEMO ORDER</p><h2>{order.number}</h2><p>Placed {order.date}. Your order is being prepared with care.</p><span>PROCESSING</span></div> : <p>Your order details will appear here after checkout. This demo keeps the latest order on this device.</p>}</main> }
